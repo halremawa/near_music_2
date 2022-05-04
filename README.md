@@ -1,7 +1,5 @@
 # halilu_test
 
-# janet_test
-
 
 Write a simple API wrapper for NEAR's  testnet API in one of C#. You should then build a simple music streaming app using the API you built. Please only use Royalty Free music. You can find some [here](https://pixabay.com/music/) and [here](https://www.bensound.com/).
 
