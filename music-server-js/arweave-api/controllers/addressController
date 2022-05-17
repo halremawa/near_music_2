@@ -1,0 +1,202 @@
+'use strict';
+const Arweave = require('arweave');
+const fs = require('fs');
+//const app = express();
+
+// Or to specify a gateway when running from NodeJS you might use
+const arweave = Arweave.init({
+  host: 'arweave.net',
+  port: 443,
+  protocol: 'https'
+});
+
+//let arweaveKey;
+let wallet;
+
+fs.readFile('arweave-api/arweave-key-_bGDw3LxfR512YhXRRMhWt7bR7Na_227ss54EJAj23M.json', 'utf8', (err, data) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  wallet = JSON.parse(data);
+  console.log(data);
+});
+
+
+    // arweave.wallets.generate().then((key) => {
+    //     console.log(key);
+    //     arweaveKey=key;
+    // });
+
+
+    const queryObject = { query: `{
+      transactions(first: 100,
+        tags: [
+          {
+            name: "App-Name",
+            values: ["PublicSquare"]
+          },
+          {
+            name: "Content-Type",
+            values: ["text/plain"]
+          }
+        ]
+      ) {
+        edges {
+          node {
+            id
+            owner {
+              address
+            }
+            data {
+              size
+            }
+            block {
+              height
+              timestamp
+            }
+            tags {
+              name,
+              value
+            }
+          }
+        }
+      }
+    }`};
+
+    exports.getArweaveAddress = function(req, res) {
+        arweave.wallets.jwkToAddress(wallet).then((address) => {
+            console.log("Address is" + address);
+            res.json(address);
+        });
+};
+
+exports.getArweaveBalance = function(req, res) {
+            arweave.wallets.jwkToAddress(wallet).then((address) => {
+                console.log(address);
+                arweave.wallets.getBalance(address).then((balance) => {
+                    console.log("Balance is: " + balance);
+                    res.json(balance);
+                });
+            });
+    };
+        
+//     exports.postSong = function(req, res) {
+//         //arweave post data
+//   let tx = arweave.createTransaction({ data:req.body.data })
+//   tx.addTag('App-Name', 'PublicSquare')
+//   tx.addTag('Content-Type', 'audio/mpeg')
+//   tx.addTag('Version', '1.0.1')
+//   tx.addTag('Type', 'post')
+//   arweave.transactions.sign(tx, wallet).then(() => {
+//   try {
+//       let uploader = arweave.transactions.getUploader(tx);
+//       while (!uploader.isComplete) {
+//          uploader.uploadChunk();
+//         console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
+//       }
+//       res.json(uploader.data);
+//   } catch (err) {
+//     console.error(err);
+//     res.json(err);
+//   }
+//   });
+//       };
+
+
+// exports.postSong = function(req, res) {
+//     debugger;
+//       fs.readFile('arweave-api/Forest Lullaby - Royalty Free Music.mp3', function(err, file){
+//           //var base64File = new Buffer(file, 'binary').toString('base64');
+//           //var base64File = Buffer.from(file, 'binary').toString('base64');
+//           var base64File = Buffer.from(file, 'binary').toString();
+//           //fs.createReadStream('arweave-api/Forest Lullaby - Royalty Free Music.mp3').pipe()
+
+//           arweave.createTransaction({ data:base64File }, wallet).then((tx) => {
+//           tx.addTag('App-Name', 'MusicShare')
+//           //tx.addTag('Content-Type', 'data:audio/mp3;base64')
+//           tx.addTag('Content-Type', 'audio/mpeg')
+//           tx.addTag('Version', '1.0.1')
+//           tx.addTag('Type', 'post')
+//           arweave.transactions.sign(tx, wallet).then(() => {
+
+//               arweave.transactions.getUploader(tx).then(async (uploader) => {
+//           try {
+//               while (!uploader.isComplete) {
+//                   await uploader.uploadChunk();
+//                   console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
+                  
+//               }
+//               res.json(
+//                   {
+//                       id:tx.id,
+//                       address:"http://arweave.net/"+tx.id,
+//                       status:"success"
+//                   });
+//           } catch (err) {
+//             console.error(err);
+//             res.json(err);
+//           }
+//       });
+//           });
+//       });
+//   });
+//   //arweave post data
+
+// };
+exports.postSong = async function(req, res) {
+    debugger;
+          //fs.createReadStream('arweave-api/Forest Lullaby - Royalty Free Music.mp3').pipe()
+let base64File=fs.readFileSync('arweave-api/Forest Lullaby - Royalty Free Music.mp3', 'binary');
+          arweave.createTransaction({ data:base64File }, wallet).then((tx) => {
+          tx.addTag('App-Name', 'MusicShare')
+          //tx.addTag('Content-Type', 'data:audio/mp3;base64')
+          tx.addTag('Content-Type', 'audio/mpeg')
+          tx.addTag('Version', '1.0.1')
+          tx.addTag('Type', 'post')
+          arweave.transactions.sign(tx, wallet).then(() => {
+
+              arweave.transactions.getUploader(tx).then(async (uploader) => {
+          try {
+              while (!uploader.isComplete) {
+                  await uploader.uploadChunk();
+                  console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
+                  
+              }
+              res.json(
+                  {
+                      id:tx.id,
+                      address:"http://arweave.net/"+tx.id,
+                      status:"success"
+                  });
+          } catch (err) {
+            console.error(err);
+            res.json(err);
+          }
+      });
+          });
+      });
+  //arweave post data
+
+};
+
+            
+            exports.postText = function(req, res) {
+              //arweave post data
+        debugger;
+        arweave.createTransaction({ data:req.body.data }, wallet).then((tx) => {
+        tx.addTag('App-Name', 'PublicSquare')
+        tx.addTag('Content-Type', 'text/plain')
+        tx.addTag('Version', '1.0.1')
+        tx.addTag('Type', 'post')
+
+        arweave.transactions.sign(tx, wallet).then(() => {
+            arweave.transactions.post(tx).then((r) => {
+                console.log(r);
+                r.id=tx.id;
+                r.address="http://arweave.net/"+tx.id;
+                res.json(r);
+            });
+        });
+    });
+            };
