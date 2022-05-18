@@ -19,15 +19,15 @@ You would be paid for successfully completing the assignment. In receiving the p
 
 ## Description
 
-This service runs my account using my key to perform certain tasks server side. This includes things like checking balances (not just for my account, but for any account) as well as making transactions on the Music share app I was tasked with building. It is a node.js express service that uses NEAR's javascript API.
+This service runs my account using my key to perform certain tasks server side. This includes stuff like checking balances (not just for my account, but for any account) as well as making transactions on the Music share app I was tasked with building. It is a node.js express service that uses NEAR's javascript API.
 
-As the Near API is the priority for now, I will be focusing on just that for now.
+As the Near API is the priority for now, I will be focusing on just that at the moment.
 
 ## Install
 
-The Near API Folder is located [here](https://github.com/CommandLineHQ/halilu_test/tree/main/music-server-js/near-api)
+The Near API Folder is located [here](https://github.com/CommandLineHQ/halilu_test/tree/main/music-server-js/near-api) (ie /music-server-js/near-api/)
 
-You can run the project folder it is located [in](https://github.com/CommandLineHQ/halilu_test/tree/main/music-server-js) as a Node.js service. After downloading the folder, run `npm install` in the folder to install dependencies locally, then `npm run start` to run the project. The service should then start on your localhost port 3001 (ie address should thus look like http://localhost:3001). You can then proceed to test the services using Postman.
+You can run the project folder it is located [in](https://github.com/CommandLineHQ/halilu_test/tree/main/music-server-js) (ie /music-server-js) as a Node.js service. After downloading the repo, run `npm install` in the "music-server-js" folder to install dependencies locally. You can then run `npm run start` to start the project. The service should have started on your localhost port 3001 (ie address should thus look like http://localhost:3001). You can then proceed to test the services using Postman.
 
 ## Available services
 
@@ -39,7 +39,7 @@ GET
 
 accountId - optional
 
-*Description* - If the account id is given, then returns details of the given account id, else returns details of the account running on the server (ie my account)
+*Description* - If the account id is given then returns details of the given account id, else returns details of the account running on the server (ie my account)
 
 2. **/near/account-balance**
 
@@ -115,9 +115,9 @@ song - this should be part of the body, as raw. The body should look like this
   }
 }
 ```
-You should also make sure to add the header 'Content-Type : application/json'
+You should also make sure to add the header 'Content-Type : application/json' to the request
 
-*Description* - Uploads the song given by the post
+*Description* - Adds the song given by the post
 
 8. **/near/songs**
 
@@ -138,7 +138,7 @@ song - this should be part of the body, as raw. The body should look like this
   }
 }
 ```
-You should also make sure to add the header 'Content-Type : application/json'
+You should also make sure to add the header 'Content-Type : application/json' to the request
 
 *Description* - Updates the song given by the post
 
