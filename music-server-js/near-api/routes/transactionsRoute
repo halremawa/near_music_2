@@ -1,0 +1,9 @@
+'use strict';
+var arProv = require('../controllers/transactionsController');
+
+module.exports = function (app) {
+
+  app.route('/near/send-token/')
+    .get(arProv.sendTokens);
+
+};

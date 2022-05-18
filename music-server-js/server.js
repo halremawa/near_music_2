@@ -2,9 +2,9 @@ var express = require('express'),
   app = express(),
   port = process.env.PORT || 3001,
   bodyParser = require('body-parser');
-  
-  process.on('uncaughtException', function (err) {
-    console.log(err);
+
+process.on('uncaughtException', function (err) {
+  console.log(err);
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,10 +16,17 @@ app.use(bodyParser.json());
 
 var routes = require('./arweave-api/routes/addressRoute'); //importing route
 routes(app); //register the route
-app.get('/', function (req, res) {
-    res.send('Hello World!'); // This will serve your request to '/'.
-  });
+
+routes = require('./near-api/routes/transactionsRoute');
+routes(app);
+
+routes = require('./near-api/routes/songsRoute');
+routes(app);
+
+routes = require('./near-api/routes/accountRoute');
+routes(app);
+
 
 app.listen(port, function () {
-    console.log('arweave RESTful API server started on: ' + port);
-   });
+  console.log('near/arweave RESTful API server started on: ' + port);
+});

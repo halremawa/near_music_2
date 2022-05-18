@@ -1,0 +1,20 @@
+'use strict';
+var arProv = require('../controllers/songsController');
+
+module.exports = function (app) {
+
+  // todoList Routes
+  app.route('/near/songs/:songId?')
+    .post(arProv.setSong)
+    .get(arProv.getSong)
+    .put(arProv.updateSong)
+    .delete(arProv.deleteSong);
+
+
+  app.route('/near/songListForUser/:accountId?')
+    .get(arProv.getSongsForUser);
+
+  app.route('/near/songList/')
+    .get(arProv.getSongs);
+
+};

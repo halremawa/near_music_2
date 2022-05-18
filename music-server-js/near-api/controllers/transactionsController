@@ -1,0 +1,21 @@
+'use strict';
+const nearBag = require('../nearProvider');
+
+let nearApi, default_account;
+nearBag.nearItems.then(async function (nearStuff) {
+    nearApi = nearStuff.nearAPI;
+    default_account = nearStuff.default_account;
+});
+
+
+exports.sendTokens = async function (req, res) {
+    try {
+        let amount = nearApi.utils.format.parseNearAmount(req.query.amount);
+        var ret = await default_account.sendMoney(req.query.to, amount);
+        res.json(ret);
+    }
+    catch (e) {
+        res.json(e);
+    }
+
+};

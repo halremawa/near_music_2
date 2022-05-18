@@ -8,7 +8,7 @@ export function setSong(song: Song): void {
     }
     storedSong=Song.fromPayload(song);
     storedSong.timeStamp=context.blockTimestamp;
-    storedSong.owner=context.sender;
+    //storedSong.owner=context.sender;
     //ContractPromiseBatch.create(song.owner).transfer(context.attachedDeposit);
     listedSongs.set(song.id, storedSong);
 }
@@ -23,7 +23,7 @@ export function uploadSong(song: Song, uploadPrice:u128): void {
     }
     storedSong=Song.fromPayload(song);
     storedSong.timeStamp=context.blockTimestamp;
-    storedSong.owner=context.sender;
+    //storedSong.owner=context.sender;
     ContractPromiseBatch.create(song.owner).transfer(context.attachedDeposit);
     listedSongs.set(song.id, storedSong);
 }

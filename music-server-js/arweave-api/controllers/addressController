@@ -23,13 +23,14 @@ fs.readFile('arweave-api/arweave-key-_bGDw3LxfR512YhXRRMhWt7bR7Na_227ss54EJAj23M
 });
 
 
-    // arweave.wallets.generate().then((key) => {
-    //     console.log(key);
-    //     arweaveKey=key;
-    // });
+// arweave.wallets.generate().then((key) => {
+//     console.log(key);
+//     arweaveKey=key;
+// });
 
 
-    const queryObject = { query: `{
+const queryObject = {
+  query: `{
       transactions(first: 100,
         tags: [
           {
@@ -64,23 +65,23 @@ fs.readFile('arweave-api/arweave-key-_bGDw3LxfR512YhXRRMhWt7bR7Na_227ss54EJAj23M
       }
     }`};
 
-    exports.getArweaveAddress = function(req, res) {
-        arweave.wallets.jwkToAddress(wallet).then((address) => {
-            console.log("Address is" + address);
-            res.json(address);
-        });
+exports.getArweaveAddress = function (req, res) {
+  arweave.wallets.jwkToAddress(wallet).then((address) => {
+    console.log("Address is" + address);
+    res.json(address);
+  });
 };
 
-exports.getArweaveBalance = function(req, res) {
-            arweave.wallets.jwkToAddress(wallet).then((address) => {
-                console.log(address);
-                arweave.wallets.getBalance(address).then((balance) => {
-                    console.log("Balance is: " + balance);
-                    res.json(balance);
-                });
-            });
-    };
-        
+exports.getArweaveBalance = function (req, res) {
+  arweave.wallets.jwkToAddress(wallet).then((address) => {
+    console.log(address);
+    arweave.wallets.getBalance(address).then((balance) => {
+      console.log("Balance is: " + balance);
+      res.json(balance);
+    });
+  });
+};
+
 //     exports.postSong = function(req, res) {
 //         //arweave post data
 //   let tx = arweave.createTransaction({ data:req.body.data })
@@ -125,7 +126,7 @@ exports.getArweaveBalance = function(req, res) {
 //               while (!uploader.isComplete) {
 //                   await uploader.uploadChunk();
 //                   console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
-                  
+
 //               }
 //               res.json(
 //                   {
@@ -144,59 +145,59 @@ exports.getArweaveBalance = function(req, res) {
 //   //arweave post data
 
 // };
-exports.postSong = async function(req, res) {
-    debugger;
-          //fs.createReadStream('arweave-api/Forest Lullaby - Royalty Free Music.mp3').pipe()
-let base64File=fs.readFileSync('arweave-api/Forest Lullaby - Royalty Free Music.mp3', 'binary');
-          arweave.createTransaction({ data:base64File }, wallet).then((tx) => {
-          tx.addTag('App-Name', 'MusicShare')
-          //tx.addTag('Content-Type', 'data:audio/mp3;base64')
-          tx.addTag('Content-Type', 'audio/mpeg')
-          tx.addTag('Version', '1.0.1')
-          tx.addTag('Type', 'post')
-          arweave.transactions.sign(tx, wallet).then(() => {
+exports.postSong = async function (req, res) {
+  debugger;
+  //fs.createReadStream('arweave-api/Forest Lullaby - Royalty Free Music.mp3').pipe()
+  let base64File = fs.readFileSync('arweave-api/Forest Lullaby - Royalty Free Music.mp3', 'binary');
+  arweave.createTransaction({ data: base64File }, wallet).then((tx) => {
+    tx.addTag('App-Name', 'MusicShare')
+    //tx.addTag('Content-Type', 'data:audio/mp3;base64')
+    tx.addTag('Content-Type', 'audio/mpeg')
+    tx.addTag('Version', '1.0.1')
+    tx.addTag('Type', 'post')
+    arweave.transactions.sign(tx, wallet).then(() => {
 
-              arweave.transactions.getUploader(tx).then(async (uploader) => {
-          try {
-              while (!uploader.isComplete) {
-                  await uploader.uploadChunk();
-                  console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
-                  
-              }
-              res.json(
-                  {
-                      id:tx.id,
-                      address:"http://arweave.net/"+tx.id,
-                      status:"success"
-                  });
-          } catch (err) {
-            console.error(err);
-            res.json(err);
+      arweave.transactions.getUploader(tx).then(async (uploader) => {
+        try {
+          while (!uploader.isComplete) {
+            await uploader.uploadChunk();
+            console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
+
           }
+          res.json(
+            {
+              id: tx.id,
+              address: "http://arweave.net/" + tx.id,
+              status: "success"
+            });
+        } catch (err) {
+          console.error(err);
+          res.json(err);
+        }
       });
-          });
-      });
+    });
+  });
   //arweave post data
 
 };
 
-            
-            exports.postText = function(req, res) {
-              //arweave post data
-        debugger;
-        arweave.createTransaction({ data:req.body.data }, wallet).then((tx) => {
-        tx.addTag('App-Name', 'PublicSquare')
-        tx.addTag('Content-Type', 'text/plain')
-        tx.addTag('Version', '1.0.1')
-        tx.addTag('Type', 'post')
 
-        arweave.transactions.sign(tx, wallet).then(() => {
-            arweave.transactions.post(tx).then((r) => {
-                console.log(r);
-                r.id=tx.id;
-                r.address="http://arweave.net/"+tx.id;
-                res.json(r);
-            });
-        });
+exports.postText = function (req, res) {
+  //arweave post data
+  debugger;
+  arweave.createTransaction({ data: req.body.data }, wallet).then((tx) => {
+    tx.addTag('App-Name', 'PublicSquare')
+    tx.addTag('Content-Type', 'text/plain')
+    tx.addTag('Version', '1.0.1')
+    tx.addTag('Type', 'post')
+
+    arweave.transactions.sign(tx, wallet).then(() => {
+      arweave.transactions.post(tx).then((r) => {
+        console.log(r);
+        r.id = tx.id;
+        r.address = "http://arweave.net/" + tx.id;
+        res.json(r);
+      });
     });
-            };
+  });
+};

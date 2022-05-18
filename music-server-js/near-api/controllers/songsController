@@ -1,0 +1,86 @@
+'use strict';
+const nearBag = require('../nearProvider');
+
+//let contract=nearBag();
+let contract;
+nearBag.nearItems.then(async function (near) {
+    contract = near.contract;
+});
+
+
+
+exports.setSong = async function (req, res) {
+    try {
+        var ret = await contract.setSong(
+            {
+                song: req.body.song, // argument name and value - pass empty object if no args required
+            },
+            // "300000000000000", // attached GAS (optional)
+            // "1000000000000000000000000" // attached deposit in yoctoNEAR (optional)
+        );
+        res.json(ret);
+    }
+    catch (e) {
+        res.json(e);
+    }
+};
+
+exports.updateSong = async function (req, res) {
+    try {
+        let ret = await contract.updateSong(
+            {
+                song: req.body.song, // argument name and value - pass empty object if no args required
+            },
+        );
+        res.json(ret);
+    }
+    catch (e) {
+        res.json(e);
+    }
+
+};
+
+exports.deleteSong = async function (req, res) {
+    try {
+        let ret = await contract.deleteSong(
+            {
+                songId: req.query.songId, // argument name and value - pass empty object if no args required
+            },
+        );
+        res.json(ret);
+    }
+    catch (e) {
+        res.json(e);
+    }
+};
+
+// can use f732c0df-c149-4254-896e-a3cecfe5d408 as songId
+exports.getSong = async function (req, res) {
+
+    const response = await contract.getSong({ id: req.query.songId });
+    //console.log(response);
+    try {
+        res.json(response);
+    } catch (e) {
+        res.json({ e });
+    }
+};
+
+// issue with contract.getSongsForUser()
+exports.getSongsForUser = async function (req, res) {
+    try {
+        const response = await contract.getSongsForUser({ userId: req.query.accountId });
+        res.json(response);
+    } catch (e) {
+        res.json({ e });
+    }
+};
+
+exports.getSongs = async function (req, res) {
+    try {
+        const response = await contract.getSongs();
+        res.json(response);
+    } catch (e) {
+        res.json({ e });
+    }
+};

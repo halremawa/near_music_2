@@ -1,0 +1,13 @@
+'use strict';
+var arProv = require('../controllers/accountController');
+
+module.exports = function (app) {
+
+  // todoList Routes
+  app.route('/near/account-details/:accountId?')
+    .get(arProv.getAccountDetails);
+
+  app.route('/near/account-balance/:accountId?')
+    .get(arProv.getAccountBalance);
+
+};

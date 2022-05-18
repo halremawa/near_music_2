@@ -1,0 +1,44 @@
+'use strict';
+const nearBag = require('../nearProvider');
+
+//let contract=nearBag();
+let near, default_account;
+nearBag.nearItems.then(async function (nearStuff) {
+  near = nearStuff.near;
+  default_account = nearStuff.default_account;
+});
+
+
+
+
+exports.getAccountBalance = async function (req, res) {
+  try {
+    let acc;
+    if (req.query.accountId) {
+      acc = await near.account(req.query.accountId);
+    }
+    else {
+      acc = default_account;
+    }
+    res.json(await acc.getAccountBalance());
+  }
+  catch (e) {
+    res.json(e);
+  }
+};
+
+exports.getAccountDetails = async function (req, res) {
+  try {
+    let acc;
+    if (req.query.accountId) {
+      acc = await near.account(req.query.accountId);
+    }
+    else {
+      acc = default_account;
+    }
+    res.json(await acc.getAccountDetails());
+  }
+  catch (e) {
+    res.json(e);
+  }
+};

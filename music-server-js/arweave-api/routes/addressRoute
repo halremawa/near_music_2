@@ -1,24 +1,24 @@
 'use strict';
 var arProv = require('../controllers/addressController');
 
-module.exports = function(app) {
+module.exports = function (app) {
 
   // todoList Routes
   app.route('/arweave/address')
-  .get(arProv.getArweaveAddress);
+    .get(arProv.getArweaveAddress);
 
   app.route('/arweave/balance')
-  .get(arProv.getArweaveBalance);
+    .get(arProv.getArweaveBalance);
 
   app.route('/arweave/postText')
     .post(arProv.postText);
 
-    app.route('/arweave/postSong')
+  app.route('/arweave/postSong')
     .post(arProv.postSong);
 
 
-//   app.route('/tasks/:taskId')
-//     .get(todoList.read_a_task)
-//     .put(todoList.update_a_task)
-//     .delete(todoList.delete_a_task);
+  //   app.route('/tasks/:taskId')
+  //     .get(todoList.read_a_task)
+  //     .put(todoList.update_a_task)
+  //     .delete(todoList.delete_a_task);
 };
