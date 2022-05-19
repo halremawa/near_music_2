@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
-import { arweave, buildQuery } from "../../lib/api";
+import { arweave } from "../../lib/api";
 
 
 const AddSong = ({ save, onLoading, offLoading }) => {
@@ -21,26 +22,36 @@ const AddSong = ({ save, onLoading, offLoading }) => {
 
   //arweave post data
   async function onPostButtonClicked() {
+
     onLoading();
-    debugger;
-    let tx = await arweave.createTransaction({ data:selectedFile.data })
-    tx.addTag('App-Name', 'PublicSquare')
-    tx.addTag('Content-Type', 'audio/mpeg')
-    tx.addTag('Version', '1.0.1')
-    tx.addTag('Type', 'post')
+
     try {
-      //let result = await window.arweaveWallet.dispatch(tx);
-      // setPostValue("");
-      // setTopicValue("");
-      //if (props.onPostMessage) {
-        let uploader = await arweave.transactions.getUploader(transaction);
-        while (!uploader.isComplete) {
-          await uploader.uploadChunk();
-          console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
-        }
-        setLocation(uploader.id);
-      //}
+      debugger;
+      let formData= new FormData();
+      formData.append('file', selectedFile);
+      for (var key of formData.entries()) {
+        console.log(key[0] + ', ' + key[1]);
+    }
+    // var ret= await fetch('http://localhost:3001/arweave/postSong', {
+    //   method: 'POST',
+    //   headers: {
+    //     //'Accept': 'application/json',
+    //     //'Content-Type': 'application/json',
+    //     'Content-Type' : 'multipart/form-data',
+    //   },
+    //   // body: JSON.stringify({
+    //   //   file: selectedFile,
+    //   // })
+    //   body: formData//)
+    // });
+    debugger;
+    var ret=await axios.post('http://localhost:3001/arweave/postSong',formData);
+    // ret.data().json().then(function(data) {
+    //   debugger;
+    // setLocation(data.Body.address);
+    // });
     } catch (err) {
+      debugger;
       console.error(err);
     }
     offLoading();
@@ -48,38 +59,37 @@ const AddSong = ({ save, onLoading, offLoading }) => {
 
 
   // On file select (from the pop up)
-  onFileChange = event => {
+  let onFileChange = event => {
+    console.log('[onFileChange]', event.target.files[0]);
     // Update the state
     setSelectedFile(event.target.files[0]);
   };
-    // File content to be displayed after
-    // file upload is complete
-    fileData = () => {
-      if (selectedFile) {
-        return (
-          <>
+  // File content to be displayed after
+  // file upload is complete
+  let fileData = () => {
+    if (selectedFile) {
+      return (
+        <>
           <div>
             <h2>File Details:</h2>
-<p>File Name: {selectedFile.name}</p>
-<p>File Type: {selectedFile.type}</p>
-<p>
-              Last Modified:{" "}
-              {selectedFile.lastModifiedDate.toDateString()}
-            </p>
+            <p>File Name: {selectedFile.name}</p>
+            <p>File Type: {selectedFile.type}</p>
+            {/* 
+             */}
           </div>
-      </>
-        );
-      } else {
-        return (
-          <>
+        </>
+      );
+    } else {
+      return (
+        <>
           <div>
             <br />
             <h4>Choose before Pressing the Upload button</h4>
           </div>
-          </>
-        );
-      }
-    };
+        </>
+      );
+    }
+  };
 
   return (
     <>
@@ -152,14 +162,14 @@ const AddSong = ({ save, onLoading, offLoading }) => {
 
 
             <div>
-            <div>
-                <input type="file" onChange={this.onFileChange} />
-                <button onClick={this.onFileUpload}>
+              <div>
+                <input type="file" onChange={onFileChange} />
+                <button onClick={onPostButtonClicked}>
                   Upload!
                 </button>
+              </div>
+              {fileData()}
             </div>
-          {fileData()}
-        </div>
 
           </Modal.Body>
         </Form>

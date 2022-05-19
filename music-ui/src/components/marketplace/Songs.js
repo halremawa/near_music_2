@@ -8,10 +8,10 @@ import { NotificationSuccess, NotificationError } from "../utils/Notifications";
 import {
   getSongs as getSongList,
   uploadSong,
-  createSong,
+  //createSong,
   editSong,
   deleteSong,
-} from "../../utils/marketplace";
+} from "../../utils/api";
 
 const Songs = () => {
     const [songs, setSongs] = useState([]);

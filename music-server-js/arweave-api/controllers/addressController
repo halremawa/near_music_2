@@ -146,16 +146,17 @@ exports.getArweaveBalance = function (req, res) {
 
 // };
 exports.postSong = async function (req, res) {
-  debugger;
+ // debugger;
+ console.log('[postSong]', req.files.file); 
   //fs.createReadStream('arweave-api/Forest Lullaby - Royalty Free Music.mp3').pipe()
-  let base64File = fs.readFileSync('arweave-api/Forest Lullaby - Royalty Free Music.mp3', 'binary');
-  arweave.createTransaction({ data: base64File }, wallet).then((tx) => {
+  //let base64File = fs.readFileSync('arweave-api/Forest Lullaby - Royalty Free Music.mp3', 'binary');
+  arweave.createTransaction({ data: req.files.file.data }, wallet).then((tx) => {
     tx.addTag('App-Name', 'MusicShare')
     //tx.addTag('Content-Type', 'data:audio/mp3;base64')
     tx.addTag('Content-Type', 'audio/mpeg')
     tx.addTag('Version', '1.0.1')
     tx.addTag('Type', 'post')
-    arweave.transactions.sign(tx, wallet).then(() => {
+    arweave.transactions.sign(tx, wallet).then(() => { 
 
       arweave.transactions.getUploader(tx).then(async (uploader) => {
         try {

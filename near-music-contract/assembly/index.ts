@@ -35,7 +35,7 @@ export function updateSong(song: Song): void {
     }
     let updateSong = Song.fromPayload(song);
     updateSong.editTimeStamp=context.blockTimestamp;
-    updateSong.owner=storedSong.owner;
+    //updateSong.owner=storedSong.owner;
     updateSong.location=storedSong.location;
     listedSongs.set(song.id, updateSong);
 }
