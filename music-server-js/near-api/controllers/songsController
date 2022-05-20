@@ -44,7 +44,7 @@ exports.deleteSong = async function (req, res) {
     try {
         let ret = await contract.deleteSong(
             {
-                songId: req.query.songId, // argument name and value - pass empty object if no args required
+                songId: req.params.songId, // argument name and value - pass empty object if no args required
             },
         );
         res.json(ret);

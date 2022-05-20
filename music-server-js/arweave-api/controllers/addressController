@@ -82,81 +82,16 @@ exports.getArweaveBalance = function (req, res) {
   });
 };
 
-//     exports.postSong = function(req, res) {
-//         //arweave post data
-//   let tx = arweave.createTransaction({ data:req.body.data })
-//   tx.addTag('App-Name', 'PublicSquare')
-//   tx.addTag('Content-Type', 'audio/mpeg')
-//   tx.addTag('Version', '1.0.1')
-//   tx.addTag('Type', 'post')
-//   arweave.transactions.sign(tx, wallet).then(() => {
-//   try {
-//       let uploader = arweave.transactions.getUploader(tx);
-//       while (!uploader.isComplete) {
-//          uploader.uploadChunk();
-//         console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
-//       }
-//       res.json(uploader.data);
-//   } catch (err) {
-//     console.error(err);
-//     res.json(err);
-//   }
-//   });
-//       };
-
-
-// exports.postSong = function(req, res) {
-//     debugger;
-//       fs.readFile('arweave-api/Forest Lullaby - Royalty Free Music.mp3', function(err, file){
-//           //var base64File = new Buffer(file, 'binary').toString('base64');
-//           //var base64File = Buffer.from(file, 'binary').toString('base64');
-//           var base64File = Buffer.from(file, 'binary').toString();
-//           //fs.createReadStream('arweave-api/Forest Lullaby - Royalty Free Music.mp3').pipe()
-
-//           arweave.createTransaction({ data:base64File }, wallet).then((tx) => {
-//           tx.addTag('App-Name', 'MusicShare')
-//           //tx.addTag('Content-Type', 'data:audio/mp3;base64')
-//           tx.addTag('Content-Type', 'audio/mpeg')
-//           tx.addTag('Version', '1.0.1')
-//           tx.addTag('Type', 'post')
-//           arweave.transactions.sign(tx, wallet).then(() => {
-
-//               arweave.transactions.getUploader(tx).then(async (uploader) => {
-//           try {
-//               while (!uploader.isComplete) {
-//                   await uploader.uploadChunk();
-//                   console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
-
-//               }
-//               res.json(
-//                   {
-//                       id:tx.id,
-//                       address:"http://arweave.net/"+tx.id,
-//                       status:"success"
-//                   });
-//           } catch (err) {
-//             console.error(err);
-//             res.json(err);
-//           }
-//       });
-//           });
-//       });
-//   });
-//   //arweave post data
-
-// };
 exports.postSong = async function (req, res) {
- // debugger;
- console.log('[postSong]', req.files.file); 
-  //fs.createReadStream('arweave-api/Forest Lullaby - Royalty Free Music.mp3').pipe()
-  //let base64File = fs.readFileSync('arweave-api/Forest Lullaby - Royalty Free Music.mp3', 'binary');
+  // debugger;
+  console.log('[postSong]', req.files.file);
   arweave.createTransaction({ data: req.files.file.data }, wallet).then((tx) => {
     tx.addTag('App-Name', 'MusicShare')
     //tx.addTag('Content-Type', 'data:audio/mp3;base64')
     tx.addTag('Content-Type', 'audio/mpeg')
     tx.addTag('Version', '1.0.1')
     tx.addTag('Type', 'post')
-    arweave.transactions.sign(tx, wallet).then(() => { 
+    arweave.transactions.sign(tx, wallet).then(() => {
 
       arweave.transactions.getUploader(tx).then(async (uploader) => {
         try {
@@ -168,7 +103,7 @@ exports.postSong = async function (req, res) {
           res.json(
             {
               id: tx.id,
-              address: "http://arweave.net/" + tx.id,
+              address: "https://arweave.net/" + tx.id,
               status: "success"
             });
         } catch (err) {

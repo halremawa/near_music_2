@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
+import { Button, Modal, Form, FloatingLabel, Spinner } from "react-bootstrap";
 import { arweave } from "../../lib/api";
+import { toast } from "react-toastify";
+import { NotificationSuccess, NotificationError } from "../utils/Notifications";
 
+
+axios.defaults.timeout = 0;
 
 const AddSong = ({ save, onLoading, offLoading }) => {
   const [name, setName] = useState("");
@@ -16,45 +20,40 @@ const AddSong = ({ save, onLoading, offLoading }) => {
 
   const [show, setShow] = useState(false);
 
+  const [showUploading, setShowUploading] = useState(false);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
 
-  //arweave post data
-  async function onPostButtonClicked() {
 
-    onLoading();
+  //arweave post data
+  async function onUploadButtonClicked() {
+
+    setShowUploading(true);
 
     try {
-      debugger;
-      let formData= new FormData();
+      //debugger;
+      let formData = new FormData();
       formData.append('file', selectedFile);
       for (var key of formData.entries()) {
         console.log(key[0] + ', ' + key[1]);
-    }
-    // var ret= await fetch('http://localhost:3001/arweave/postSong', {
-    //   method: 'POST',
-    //   headers: {
-    //     //'Accept': 'application/json',
-    //     //'Content-Type': 'application/json',
-    //     'Content-Type' : 'multipart/form-data',
-    //   },
-    //   // body: JSON.stringify({
-    //   //   file: selectedFile,
-    //   // })
-    //   body: formData//)
-    // });
-    debugger;
-    var ret=await axios.post('http://localhost:3001/arweave/postSong',formData);
-    // ret.data().json().then(function(data) {
-    //   debugger;
-    // setLocation(data.Body.address);
-    // });
+      }
+      //debugger;
+      var ret = await axios.post('http://localhost:3001/arweave/postSong', formData, {timeout:0});
+
+      //debugger;
+      setLocation(ret.data.address);
+      setShowUploading(false);
+      toast(<NotificationSuccess text="Song uploaded successfully." />);
+      return ret.data;
+
     } catch (err) {
-      debugger;
+      //debugger;
       console.error(err);
-    }
-    offLoading();
+      setShowUploading(false);
+      toast(<NotificationSuccess text="Network congestion. Please try again later." />);
+    };
   }
 
 
@@ -146,7 +145,7 @@ const AddSong = ({ save, onLoading, offLoading }) => {
                 }}
               />
             </FloatingLabel>
-            <FloatingLabel
+            {/* <FloatingLabel
               controlId="inputLocation"
               label="Location"
               className="mb-3"
@@ -154,21 +153,44 @@ const AddSong = ({ save, onLoading, offLoading }) => {
               <Form.Control
                 type="text"
                 placeholder="Location"
+                contentEditable="false"
                 onChange={(e) => {
                   setLocation(e.target.value);
                 }}
               />
-            </FloatingLabel>
+            </FloatingLabel> */}
 
 
             <div>
+              <di>
+                Location: {location}
+              </di>
               <div>
                 <input type="file" onChange={onFileChange} />
-                <button onClick={onPostButtonClicked}>
-                  Upload!
-                </button>
+                {!showUploading ? (
+                  <>
+                    <button onClick={onUploadButtonClicked}>
+                      Upload!
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Button disabled>
+                      <Spinner
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                      Uploading...
+                    </Button>
+                  </>
+                )
+
+                }
               </div>
-              {fileData()}
+              {/* {fileData()} */}
             </div>
 
           </Modal.Body>
@@ -194,6 +216,7 @@ const AddSong = ({ save, onLoading, offLoading }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
     </>
   );
 };

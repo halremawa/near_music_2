@@ -27,7 +27,7 @@ export class Song {
         product.isUploaded = payload.isUploaded;
         product.editTimeStamp = payload.editTimeStamp;
         product.timeStamp = payload.timeStamp;
-        product.owner = context.sender;
+        product.owner = payload.owner;
         return product;
     }
     public incrementSoldAmount(): void {
