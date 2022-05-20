@@ -14,139 +14,31 @@ You should write tests for both the API and the phot sharing app. You should als
 You would be paid for successfully completing the assignment. In receiving the payment, you would be giving up all rights to the work. 
 
 
-
-# Near API 
+# Submission Overview
 
 ## Description
 
-This service runs my account using my key to perform certain tasks server side. This includes stuff like checking balances (not just for my account, but for any account) as well as making transactions on the Music share app I was tasked with building. It is a node.js express service that uses NEAR's javascript API.
+This particular project is free for end users. Everything is paid for server side using my own keys. End users need a near testnet account to login, but that is all they need it for (for now, eventually if one wanted to say implement a subscription service then they could pay using that)
 
-As the Near API is the priority for now, I will be focusing on just that at the moment.
+NEAR stores all data asides from the music uploads themselves, those are stored on arweave
+
+*Notes on arweave uploads*
+
+Arweave's network can, at times, become unstable, at least enough for timeouts to occur internally in their libraries (the music still gets uploaded usually, but for now the app cannot tell that). When that happens simply reload and try again. Also, even with upload success, it might still take a while for the song to become available, usually I think it is confiming the transactions before it becomes fully available. This shouldn't take more than 2-3 minutes when it occurs though, so just note that immediately after upload, the song might not be immediately playable.
+
+A smoother experience may probably be built (something akin to what the arweave wallet app is like) but that would require more time to build.
+
+## Projects
+
+music-server-js - The javascript node.js service for NEAR and arweave
+
+music-ui - The react frontend
+
+NearCore - .NET core wrapper for NEAR RPC
+
+near-music-contract - The NEAR contract
+
 
 ## Install
 
-The Near API Folder is located [here](https://github.com/CommandLineHQ/halilu_test/tree/main/music-server-js/near-api) (ie /music-server-js/near-api/)
-
-You can run the project folder it is located [in](https://github.com/CommandLineHQ/halilu_test/tree/main/music-server-js) (ie /music-server-js) as a Node.js service. After downloading the repo, run `npm install` in the "music-server-js" folder to install dependencies locally. You can then run `npm run start` to start the project. The service should have started on your localhost port 3001 (ie address should thus look like http://localhost:3001). You can then proceed to test the services using Postman.
-
-## Available services
-
-1. **/near/account-details**
-
-GET
-
-*Parameters* - 
-
-accountId - optional
-
-*Description* - If the account id is given then returns details of the given account id, else returns details of the account running on the server (ie my account)
-
-2. **/near/account-balance**
-
-GET
-
-*Parameters* - 
-
-accountId - optional
-
-*Description* - If the account id is given, then returns balance of the given account id, else returns balance of the account running on the server (ie my account)
-
-3. **/near/send-token**
-
-GET
-
-*parameters* 
-
-amount - amount to be sent
-
-to - account id of wallet to be sent to
-
-*Description* - Sends tokens from my testnet account to the designated wallet
-
-
-
-### Music-share marketplace specific services
-
-These endpoints perform tasks on the music share contract using my account
-
-
-4. **/near/songlist**
-
-GET
-
-*Description* - Retrieves a list of all songs stored by contract
-
-5. **/near/songs**
-
-GET
-
-*parameters* 
-
-songId - id of song to view
-
-*Description* - Gets the song with the id supplied
-
-6. **/near/songs**
-
-DELETE
-
-*parameters* 
-
-songId - id of song to delete
-
-*Description* - Deletes song with supplied id
-
-7. **/near/songs**
-
-POST
-
-*parameters* 
-
-song - this should be part of the body, as raw. The body should look like this
-```
-{
-  "song": {
-    "id": "10",
-    "name": "no",
-    "image": "nono",
-    "owner": "halremawa.testnet",
-    "artist": "finals",
-    "location": "nonono"
-  }
-}
-```
-You should also make sure to add the header 'Content-Type : application/json' to the request
-
-*Description* - Adds the song given by the post
-
-8. **/near/songs**
-
-PUT
-
-*parameters* 
-
-song - this should be part of the body, as raw. The body should look like this
-```
-{
-  "song": {
-    "id": "10",
-    "name": "no",
-    "image": "nono",
-    "owner": "halremawa.testnet",
-    "artist": "finals",
-    "location": "nonono"
-  }
-}
-```
-You should also make sure to add the header 'Content-Type : application/json' to the request
-
-*Description* - Updates the song given by the post
-
-
-
-
-
-
-
-
-
+Find in each folder please.

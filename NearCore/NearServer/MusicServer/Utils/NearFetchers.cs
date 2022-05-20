@@ -19,7 +19,7 @@ namespace MusicServer.Utils
         private static readonly HttpClient client = new HttpClient();
         public async Task<ViewKeyResult> GetKeyDetails(string accountId, string publicKey)
         {
-            var reqstr = string.Format("{'jsonrpc': '2.0','id': 'halremawa','method': 'query','params': {'request_type': 'view_access_key','finality': 'final','account_id': '{0}','public_key': '{1}'}}", accountId, publicKey).Replace("'", "\"");
+            var reqstr = string.Format("{{'jsonrpc': '2.0','id': 'halremawa','method': 'query','params': {{'request_type': 'view_access_key','finality': 'final','account_id': '{0}','public_key': '{1}'}}}}", accountId, publicKey).Replace("'", "\"");
             var content = new StringContent(reqstr, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(NearSettings.BaseUrl, content);
             var responseString = await response.Content.ReadAsStringAsync();
@@ -29,7 +29,7 @@ namespace MusicServer.Utils
         }
         public async Task<GetKeyListResult> GetKeyList(string accountId, string finality = "final")
         {
-            var reqstr = string.Format("{'jsonrpc': '2.0','id': 'dontcare','method': 'query','params': {'request_type': 'view_access_key_list','finality': '{1}','account_id': '{0}'}}", accountId, finality).Replace("'", "\"");
+            var reqstr = string.Format("{{'jsonrpc': '2.0','id': 'dontcare','method': 'query','params': {{'request_type': 'view_access_key_list','finality': '{1}','account_id': '{0}'}}}}", accountId, finality).Replace("'", "\"");
             var content = new StringContent(reqstr, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(NearSettings.BaseUrl, content);
             var responseString = await response.Content.ReadAsStringAsync();
@@ -39,7 +39,7 @@ namespace MusicServer.Utils
         }
         public async Task<ViewAccountResult> ViewAccountDetails(string accountId, string finality = "final")
         {
-            var reqstr = string.Format("{'jsonrpc': '2.0','id': 'dontcare','method': 'query','params': {'request_type': 'view_account','finality': '{1}','account_id': '{0}'}}", accountId, finality).Replace("'", "\"");
+            var reqstr = string.Format("{{'jsonrpc': '2.0','id': 'dontcare','method': 'query','params': {{'request_type': 'view_account','finality': '{1}','account_id': '{0}'}}}}", accountId, finality).Replace("'", "\"");
             var content = new StringContent(reqstr, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(NearSettings.BaseUrl, content);
             var responseString = await response.Content.ReadAsStringAsync();
@@ -54,11 +54,11 @@ namespace MusicServer.Utils
             //check if pars ia a number
             if (int.TryParse(pars, out int result) || pars.Trim().ToLower() == "null")
             {
-                reqstr = string.Format("{'jsonrpc': '2.0','id': 'dontcare','method': 'gas_price','params': [{0}]}", pars).Replace("'", "\"");
+                reqstr = string.Format("{{'jsonrpc': '2.0','id': 'dontcare','method': 'gas_price','params': [{0}]}}", pars).Replace("'", "\"");
             }
             else
             {
-                reqstr = string.Format("{ 'jsonrpc': '2.0','id': 'dontcare','method': 'gas_price','params': ['{0}']}", pars).Replace("'", "\"");
+                reqstr = string.Format("{{ 'jsonrpc': '2.0','id': 'dontcare','method': 'gas_price','params': ['{0}']}}", pars).Replace("'", "\"");
             }
             var content = new StringContent(reqstr, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(NearSettings.BaseUrl, content);
@@ -74,7 +74,7 @@ namespace MusicServer.Utils
         /// <returns></returns>
         public async Task<SendTransAsyncResult> SendTransactionAsync(string pars)
         {
-            string reqstr = string.Format("{ 'jsonrpc': '2.0','id': 'dontcare','method': 'broadcast_tx_async','params': ['{0}']}", pars).Replace("'", "\"");
+            string reqstr = string.Format("{{ 'jsonrpc': '2.0','id': 'dontcare','method': 'broadcast_tx_async','params': ['{0}']}}", pars).Replace("'", "\"");
 
             var content = new StringContent(reqstr, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(NearSettings.BaseUrl, content);
@@ -90,7 +90,7 @@ namespace MusicServer.Utils
         /// <returns></returns>
         public async Task<SendTransAwaitResult> SendTransactionAwait(string pars)
         {
-            string reqstr = string.Format("{ 'jsonrpc': '2.0','id': 'dontcare','method': 'broadcast_tx_commit','params': ['{0}']}", pars).Replace("'", "\"");
+            string reqstr = string.Format("{{ 'jsonrpc': '2.0','id': 'dontcare','method': 'broadcast_tx_commit','params': ['{0}']}}", pars).Replace("'", "\"");
 
             var content = new StringContent(reqstr, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(NearSettings.BaseUrl, content);
@@ -101,7 +101,7 @@ namespace MusicServer.Utils
         }
         public async Task<GetTransStatusResult> GetTransactionStatus(string transHash, string senderAccountId)
         {
-            string reqstr = string.Format("{ 'jsonrpc': '2.0','id': 'dontcare','method': 'tx','params': ['{0}','{1}']}", transHash, senderAccountId).Replace("'", "\"");
+            string reqstr = string.Format("{{ 'jsonrpc': '2.0','id': 'dontcare','method': 'tx','params': ['{0}','{1}']}}", transHash, senderAccountId).Replace("'", "\"");
 
             var content = new StringContent(reqstr, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(NearSettings.BaseUrl, content);
@@ -112,7 +112,7 @@ namespace MusicServer.Utils
         }
         public async Task<GetTransStatusWRecieptResult> GetTransactionStatusWithReciepts(string transHash, string senderAccountId)
         {
-            string reqstr = string.Format("{ 'jsonrpc': '2.0','id': 'dontcare','method': 'EXPERIMENTAL_tx_status','params': ['{0}','{1}']}", transHash, senderAccountId).Replace("'", "\"");
+            string reqstr = string.Format("{{ 'jsonrpc': '2.0','id': 'dontcare','method': 'EXPERIMENTAL_tx_status','params': ['{0}','{1}']}}", transHash, senderAccountId).Replace("'", "\"");
 
             var content = new StringContent(reqstr, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(NearSettings.BaseUrl, content);
@@ -123,7 +123,7 @@ namespace MusicServer.Utils
         }
         public async Task<GetRecieptByIdResult> GetRecieptsById(string recieptId)
         {
-            string reqstr = string.Format("{ 'jsonrpc': '2.0','id': 'dontcare','method': 'EXPERIMENTAL_receiptEXPERIMENTAL_receipt','params': ['{0}']}", recieptId).Replace("'", "\"");
+            string reqstr = string.Format("{{ 'jsonrpc': '2.0','id': 'dontcare','method': 'EXPERIMENTAL_receiptEXPERIMENTAL_receipt','params': ['{0}']}}", recieptId).Replace("'", "\"");
 
             var content = new StringContent(reqstr, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(NearSettings.BaseUrl, content);

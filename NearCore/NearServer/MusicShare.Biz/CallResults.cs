@@ -1,4 +1,7 @@
-﻿namespace MusicShare.Biz
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace MusicShare.Biz
 {
 
     //View Key
@@ -8,11 +11,15 @@
         public ViewKeySubResult result { get; set; }
         public string id { get; set; }
     }
-
+    
     public class ViewKeySubResult
     {
-        public int nonce { get; set; }
-        public VKSRPermission permission { get; set; }
+        public double nonce { get; set; }
+        
+        [JsonExtensionData]
+        public Dictionary<string, JsonElement> permission { get; set; }
+        //public VKSRPermission permission { get; set; }
+        //public string permission { get; set; }
         public int block_height { get; set; }
         public string block_hash { get; set; }
     }
@@ -53,7 +60,7 @@
 
     public class GetKeyListAccessKey
     {
-        public int nonce { get; set; }
+        public double nonce { get; set; }
         public object permission { get; set; }
     }
 
@@ -191,7 +198,7 @@
     {
         public string signer_id { get; set; }
         public string public_key { get; set; }
-        public int nonce { get; set; }
+        public double nonce { get; set; }
         public string receiver_id { get; set; }
         public STARAction[] actions { get; set; }
         public string signature { get; set; }
@@ -282,7 +289,7 @@
     {
         public string signer_id { get; set; }
         public string public_key { get; set; }
-        public int nonce { get; set; }
+        public double nonce { get; set; }
         public string receiver_id { get; set; }
         public GTSRAction[] actions { get; set; }
         public string signature { get; set; }
@@ -386,7 +393,7 @@
     {
         public TSWRAction[] actions { get; set; }
         public string hash { get; set; }
-        public int nonce { get; set; }
+        public double nonce { get; set; }
         public string public_key { get; set; }
         public string receiver_id { get; set; }
         public string signature { get; set; }

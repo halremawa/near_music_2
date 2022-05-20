@@ -1,3 +1,12 @@
+# Introduction
+
+This is the UI for the app. It is a simple react app. 
+
+Before running please make sure the Javascript Server application is running (it should be on http://localhost:3001 if you started it correctly)
+
+Overview on usage in the main `read.me` file
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

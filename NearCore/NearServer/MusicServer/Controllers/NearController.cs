@@ -12,10 +12,17 @@ using MusicShare.Biz;
 namespace MusicShareServer.Controllers
 {
     [Route("api/[controller]")]
+    //[RoutePrefix("api/[controller]")]
     [ApiController]
     public class NearKeyController : ControllerBase
     {
         // GET: api/<NearController>
+        /// <summary>
+        /// Due to restrictions with return values, this works with only keys that have function calls as return values, for now
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <param name="publicKey">Use a key that uses function calls as opposed to full access</param>
+        /// <returns></returns>
         [Route("GetKeyDetails")]
         [HttpGet]
         public ViewKeyResult GetKeyDetails(string accountId, string publicKey)
@@ -24,8 +31,8 @@ namespace MusicShareServer.Controllers
         }
 
         // GET api/<NearController>/5
-        [Route("GetKeyList/{id}")]
-        [HttpGet("{id}")]
+        [Route("GetKeyList")]
+        [HttpGet]
         public GetKeyListResult GetKeyList(string accountId, string finality = "final")
         {
             return new NearFetchers().GetKeyList(accountId, finality).Result;
@@ -64,7 +71,7 @@ namespace MusicShareServer.Controllers
     public class NearTransactionController : ControllerBase
     {
         // GET: api/<NearController>
-        //[Route("GetKeyDetails")]
+        [Route("SendTransactionAsync")]
         [HttpGet]
         public SendTransAsyncResult SendTransactionAsync(string pars)
         {
@@ -72,7 +79,7 @@ namespace MusicShareServer.Controllers
         }
 
         // GET: api/<NearController>
-        //[Route("GetKeyDetails")]
+        [Route("SendTransactionAwait")]
         [HttpGet]
         public SendTransAwaitResult SendTransactionAwait(string pars)
         {
@@ -80,7 +87,7 @@ namespace MusicShareServer.Controllers
         }
 
         // GET: api/<NearController>
-        //[Route("GetKeyDetails")]
+        [Route("GetTransactionStatus")]
         [HttpGet]
         public GetTransStatusResult GetTransactionStatus(string transHash, string senderAccountId)
         {
@@ -88,15 +95,15 @@ namespace MusicShareServer.Controllers
         }
 
         // GET: api/<NearController>
-        //[Route("GetKeyDetails")]
+        [Route("GetTransactionStatusWithReciepts")]
         [HttpGet]
         public GetTransStatusWRecieptResult GetTransactionStatusWithReciepts(string transHash, string senderAccountId)
         {
             return new NearFetchers().GetTransactionStatusWithReciepts(transHash, senderAccountId).Result;
         }
-        
+
         // GET: api/<NearController>
-        //[Route("GetKeyDetails")]
+        [Route("GetRecieptsById")]
         [HttpGet]
         public GetRecieptByIdResult GetRecieptsById(string recieptId)
         {
